@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Id": "PutObjPolicy",
+    "Statement": [
+        {
+            "Sid": "DenyUnEncryptedObjectUploads",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::encryption-test/*",
+            "Condition": {
+                "Null": {
+                    "s3:x-amz-server-side-encryption": "true"
+                }
+            }
+        }
+    ]
+}
+
+## Commands: 
+
+# Test upload without encryption:
+aws s3api put-object --body filename.ext --key filename.ext --bucket encryption-test 
+
+# Specify AES256 in PutObject API:
+aws s3api put-object --body filename.ext --key filename.ext --bucket encryption-test --server-side-encryption AES256
